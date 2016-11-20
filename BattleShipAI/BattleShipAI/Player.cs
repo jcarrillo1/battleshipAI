@@ -217,19 +217,9 @@ namespace BattleShip
                 while (moves.Count > 0)
                 {
                     Point nextMove = moves.Pop();
-                    bool sunk = false;
-                    foreach(Ship ship in target.ships)
-                    {
-                        if (ship.name == nextMove.shipName)
-                        {
-                            if (ship.IsSunk())
-                            {
-                                sunk = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (sunk) continue;
+                    Ship ship = target.ships.Find(x => nextMove.shipName == x.name);
+                    if (ship.IsSunk()) continue;
+                    
                     if (GenedAttack(target, nextMove.x, nextMove.y))
                     {   
                         return;
@@ -250,7 +240,6 @@ namespace BattleShip
                         genY += 1;
                     }
                     
-                    Console.WriteLine($"{genX}, {genY}");
                     attacked = GenedAttack(target, genX, genY);
                 } while (!attacked);
             }
