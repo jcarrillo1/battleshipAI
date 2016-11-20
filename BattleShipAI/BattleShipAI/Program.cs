@@ -27,7 +27,7 @@ namespace BattleShip
             Console.WindowWidth = 120;
             int gameCount = 0;
             double average = 0;
-            double totalGames = 100;
+            double totalGames = 100000;
             while (gameCount < totalGames)
             {
                 Player human1 = new Player();

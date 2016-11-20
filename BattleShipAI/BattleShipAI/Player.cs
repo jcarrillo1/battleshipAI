@@ -18,6 +18,14 @@ namespace BattleShip
             new Ship(4, "battleship"),
             new Ship(5, "carrier"),
         };
+        public Dictionary<string, int> wildShips = new Dictionary<string, int>()
+        {
+            { "destroyer", 2 },
+            { "submarine", 3 },
+            { "cruiser", 3 },
+            { "battleship", 4 },
+            { "carrier", 5 }
+        };
 
         public void PrintBoard(int[,] board)
         {
@@ -177,6 +185,7 @@ namespace BattleShip
                                 shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
+                                wildShips.Remove(shp.name);
                                 //Console.WriteLine($"Ship {shp.name} has been sunk");
                             }
                             else if (point != null && shp.name == point.shipName)
@@ -211,6 +220,7 @@ namespace BattleShip
                                 shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
+                                wildShips.Remove(shp.name);
                                 //Console.WriteLine($"Ship {shp.name} has been sunk");
                             }
                             else if (point != null && shp.name == point.shipName)
@@ -271,19 +281,80 @@ namespace BattleShip
                 do
                 {
                     // Checkerboard generations
-                    genX = StaticRandom.Instance.Next(0, 10);
-                    genY = StaticRandom.Instance.Next(0, 9);
-                    if ((genX % 2 == 0 && genY % 2 != 1) || (genX % 2 == 1 && genY % 2 != 0))
-                    {
-                        genY += 1;
-                    }
-
+                    //genX = StaticRandom.Instance.Next(0, 10);
+                    //genY = StaticRandom.Instance.Next(0, 9);
+                    //if ((genX % 2 == 0 && genY % 2 != 1) || (genX % 2 == 1 && genY % 2 != 0))
+                    //{
+                    //    genY += 1;
+                    //}
+                    var bestMove = GenerateHit();
                     // Random generations
                     //genX = StaticRandom.Instance.Next(0, 10);
                     //genY = StaticRandom.Instance.Next(0, 10);
-                    attacked = GenedAttack(target, genX, genY, null);
+                    attacked = GenedAttack(target, bestMove.Item1, bestMove.Item2, null);
                 } while (!attacked);
             }
+            
+        }
+        public Tuple<int, int> GenerateHit()
+        {
+            
+            int[,] probability = new int[10, 10];
+            foreach (KeyValuePair<string, int> ship in wildShips)
+            {
+                int shipSize = ship.Value;
+                for (int row = 0; row < 10; row++)
+                {
+                    int streak = 0;
+                    for (int col = 0; col < 10; col++)
+                    {
+                        if (attack[row, col] != 0)
+                        {
+                            streak = 0;
+                            continue;
+                        }
+                        else if (attack[row, col] == 0 && streak < shipSize) streak++;
+                        if (streak == shipSize)
+                        {
+                            for (int i = col - shipSize + 1; i <= col; i++)
+                            {
+                                probability[row, i] += 1;
+                            }
+                        }
+                    }
+                    streak = 0;
+                    for (int col = 0; col < 10; col++)
+                    {
+                        if (attack[col, row] != 0)
+                        {
+                            streak = 0;
+                            continue;
+                        }
+                        else if (attack[col, row] == 0 && streak < shipSize) streak++;
+                        if (streak == shipSize)
+                        {
+                            for (int i = col - shipSize + 1; i <= col; i++)
+                            {
+                                probability[i, row] += 1;
+                            }
+                        }
+                    }
+                }
+            }
+            int x = 0, y = 0, maxProb = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (probability[i, j] > maxProb)
+                    {
+                        maxProb = probability[i, j];
+                        x = i;
+                        y = j;
+                    }
+                }
+            }
+            return new Tuple<int,int>(x, y);
             
         }
     }
