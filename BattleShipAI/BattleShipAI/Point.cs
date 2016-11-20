@@ -5,11 +5,12 @@
         public int x;
         public int y;
         public Ship ship;
-        public Point(int x, int y, Ship ship)
+        public string shipName;
+        public Point(int x, int y, string shipName)
         {
             this.x = x;
             this.y = y;
-            this.ship = ship;
+            this.shipName = shipName;
         }
     }
 }

@@ -164,10 +164,10 @@ namespace BattleShip
                             }
                             else
                             {
-                                moves.Push(new Point(x + 1, y, shp));
-                                moves.Push(new Point(x - 1, y, shp));
-                                moves.Push(new Point(x, y - 1, shp));
-                                moves.Push(new Point(x, y + 1, shp));
+                                moves.Push(new Point(x + 1, y, shp.name));
+                                moves.Push(new Point(x - 1, y, shp.name));
+                                moves.Push(new Point(x, y - 1, shp.name));
+                                moves.Push(new Point(x, y + 1, shp.name));
                             }
                             break;
                         }
@@ -189,10 +189,10 @@ namespace BattleShip
                             }
                             else
                             {
-                                moves.Push(new Point(x + 1, y, shp));
-                                moves.Push(new Point(x - 1, y, shp));
-                                moves.Push(new Point(x, y - 1, shp));
-                                moves.Push(new Point(x, y + 1, shp));
+                                moves.Push(new Point(x + 1, y, shp.name));
+                                moves.Push(new Point(x - 1, y, shp.name));
+                                moves.Push(new Point(x, y - 1, shp.name));
+                                moves.Push(new Point(x, y + 1, shp.name));
                             }
                             break;
                         }
@@ -220,7 +220,7 @@ namespace BattleShip
                     bool sunk = false;
                     foreach(Ship ship in target.ships)
                     {
-                        if (ship.name == nextMove.ship.name)
+                        if (ship.name == nextMove.shipName)
                         {
                             if (ship.IsSunk())
                             {
@@ -244,7 +244,13 @@ namespace BattleShip
                 do
                 {
                     genX = StaticRandom.Instance.Next(0, 10);
-                    genY = (genX/2) == 0 ? StaticRandom.Instance.Next(0, 17)/2 + 1:StaticRandom.Instance.Next(0,17)/2;
+                    genY = StaticRandom.Instance.Next(0, 9);
+                    if ((genX% 2 == 0 && genY % 2 != 1) || (genX % 2 == 1 && genY % 2 != 0))
+                    {
+                        genY += 1;
+                    }
+                    
+                    Console.WriteLine($"{genX}, {genY}");
                     attacked = GenedAttack(target, genX, genY);
                 } while (!attacked);
             }
