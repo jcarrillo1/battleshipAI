@@ -228,7 +228,7 @@ namespace BattleShip
                 do
                 {
                     genX = StaticRandom.Instance.Next(0, 10);
-                    genY = StaticRandom.Instance.Next(0, 10);
+                    genY = (genX/2) == 0 ? StaticRandom.Instance.Next(0, 17)/2 + 1:StaticRandom.Instance.Next(0,17)/2;
                     attacked = GenedAttack(target, genX, genY);
                 } while (!attacked);
             }
