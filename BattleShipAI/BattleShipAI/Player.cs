@@ -76,10 +76,15 @@ namespace BattleShip
                 {
                     if (shp.loc.Item1 == shp.loc.Item3 && shp.loc.Item1 == x)
                     {
-                        if ((shp.loc.Item2 <= y && y <= shp.loc.Item4) || (shp.loc.Item2 >= y && y >= shp.loc.Item4))
+                        if (shp.loc.Item2 <= y && y < shp.loc.Item4)
                         {
-                            int i = shp.size.First(z => z == 0);
-                            shp.size[i] = 1;
+                            int i;
+                            for (i = 0; i < shp.size.Length; i++)
+                            {
+                                if (shp.size[i] == 0) break;
+                            }
+                            if (i < shp.size.Length)
+                                shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
                                 Console.WriteLine($"Ship {shp.name} has been sunk");
@@ -93,10 +98,15 @@ namespace BattleShip
                     }
                     else if (shp.loc.Item2 == shp.loc.Item4 && shp.loc.Item2 == y)
                     {
-                        if ((shp.loc.Item1 <= x && x <= shp.loc.Item3) || (shp.loc.Item1 >= x && x >= shp.loc.Item3))
+                        if (shp.loc.Item1 <= x && x < shp.loc.Item3)
                         {
-                            int i = shp.size.First(z => z == 0);
-                            shp.size[i] = 1;
+                            int i;
+                            for (i = 0; i < shp.size.Length; i++)
+                            {
+                                if (shp.size[i] == 0) break;
+                            }
+                            if (i < shp.size.Length)
+                                shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
                                 Console.WriteLine($"Ship {shp.name} has been sunk");
@@ -139,14 +149,15 @@ namespace BattleShip
                 {
                     if (shp.loc.Item1 == shp.loc.Item3 && shp.loc.Item1 == x)
                     {
-                        if ((shp.loc.Item2 <= y && y <= shp.loc.Item4) || (shp.loc.Item2 >= y && y >= shp.loc.Item4))
+                        if (shp.loc.Item2 <= y && y < shp.loc.Item4)
                         {
                             int i;
                             for (i = 0; i < shp.size.Length; i++)
                             {
                                 if (shp.size[i] == 0) break;
                             }
-                            shp.size[i] = 1;
+                            if (i < shp.size.Length)
+                                shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
                                 Console.WriteLine($"Ship {shp.name} has been sunk");
@@ -163,10 +174,15 @@ namespace BattleShip
                     }
                     else if (shp.loc.Item2 == shp.loc.Item4 && shp.loc.Item2 == y)
                     {
-                        if ((shp.loc.Item1 <= x && x <= shp.loc.Item3) || (shp.loc.Item1 >= x && x >= shp.loc.Item3))
+                        if (shp.loc.Item1 <= x && x < shp.loc.Item3)
                         {
-                            int i = shp.size.First(z => z == 0);
-                            shp.size[i] = 1;
+                            int i;
+                            for (i = 0; i < shp.size.Length; i++)
+                            {
+                                if (shp.size[i] == 0) break;
+                            }
+                            if (i < shp.size.Length)
+                                shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
                                 Console.WriteLine($"Ship {shp.name} has been sunk");

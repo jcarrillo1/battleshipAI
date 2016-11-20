@@ -82,6 +82,8 @@ namespace BattleShip
                 //} while (!didAttack);
 
                 human1.GenerateAttack(human2);
+                Console.WriteLine($"1 att");
+                human1.PrintBoard(human1.attack);
                 if (IsGameOver(human2))
                 {
                     Console.WriteLine($"You won");
@@ -89,7 +91,8 @@ namespace BattleShip
                 }
                
                 human2.GenerateAttack(human1);
-                
+                Console.WriteLine($"2 att");
+                human1.PrintBoard(human2.attack);
                 if (IsGameOver(human1))
                 {
                     Console.WriteLine($"You lost");
@@ -99,12 +102,10 @@ namespace BattleShip
                 
                 //Console.WriteLine($"2 def");
                 //human1.PrintBoard(human2.defend);
-                Console.WriteLine($"2 att");
-                human1.PrintBoard(human2.attack);
+                
                 //Console.WriteLine($"1 def");
                 //human1.PrintBoard(human1.defend);
-                Console.WriteLine($"1 att");
-                human1.PrintBoard(human1.attack);
+                
             }
             Console.ReadLine();
         }
