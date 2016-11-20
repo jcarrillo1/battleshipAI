@@ -6,55 +6,9 @@ using System.Threading.Tasks;
 
 namespace BattleShip
 {
-    class Ship
-    {
-        public int[] size;
-        public Tuple<int, int, int, int> loc;
-        public string name;
-        public bool sunk = false;
-        public bool placed = false;
-
-        public Ship(int sz, string nme)
-        {
-            size = new int[sz];
-            name = nme;
-        }
-
-        public void SetLocation(int x, int y, int x2, int y2)
-        {
-            loc = new Tuple<int, int, int, int>(x, y, x2, y2);
-        }
-    }
-
-    class Player
-    {
-        public int[,] defend = new int[10, 10];
-        public int[,] attack = new int[10, 10];
-        public List<Ship> ships = new List<Ship>()
-        {
-            new Ship(2, "destroyer"),
-            new Ship(3, "submarine"),
-            new Ship(3, "cruiser"),
-            new Ship(4, "battleship"),
-            new Ship(5, "carrier"),
-        };
-
-        public void PrintBoard(int[,] board)
-        {
-            for (int i = 0; i < board.GetLength(0); i++)
-            {
-                for (int j = 0; j < board.GetLength(1); j++)
-                {
-                    Console.Write($"{board[i, j]} ");
-                }
-                Console.WriteLine();
-            }
-        }
-    }
-
     class Program
     {
-        static bool PlaceShip(Player player, Ship ship, int x, int y, char direction)
+        static bool PlaceShip(Player player, Ship ship, int x, int y, int direction)
         {
             int x2 = 0;
             int y2 = 0;
@@ -71,23 +25,13 @@ namespace BattleShip
 
             switch (direction)
             {
-                case 'u':
-                case 'U':
-                    x2 = x - shipLength;
-                    y2 = y;
-                    break;
-                case 'd':
-                case 'D':
+                // Horizontal
+                case 1:
                     x2 = x + shipLength;
                     y2 = y;
                     break;
-                case 'l':
-                case 'L':
-                    x2 = x;
-                    y2 = y - shipLength;
-                    break;
-                case 'r':
-                case 'R':
+                // Vertical down
+                case 0:
                     x2 = x;
                     y2 = y + shipLength;
                     break;
@@ -227,12 +171,7 @@ namespace BattleShip
                     }
                 }
                 target.defend[x, y] = 1;
-                Console.WriteLine($"It's a hit! Attack again (1-10): x y");
-                var input = Console.ReadLine().Split(' ');
-                int x2 = int.Parse(input[0]);
-                int y2 = int.Parse(input[1]);
-
-                Attack(player, target, x2, y2);
+                Console.WriteLine($"It's a hit!");
             }
             else
             {
@@ -255,26 +194,55 @@ namespace BattleShip
 
             foreach (Ship ship in human1.ships.Where(x => x.placed == false))
             {
-                Console.WriteLine($"Please enter a start location, x y (1-10) and direction (u,d,l,r) for your {ship.name} of size {ship.size.Length}. Enter as: x y d");
-                var input = Console.ReadLine().Split(' ');
-                int x = int.Parse(input[0]);
-                int y = int.Parse(input[1]);
-                char dir = char.Parse(input[2]);
+                bool placed = false;
+                human1.PrintBoard(human1.defend);
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine($"Please enter a start location in the format x y d for your {ship.name} of size {ship.size.Length}.\nEnter coordinates x y (1-10) and direction d (0 for horizontal, 1 for vertical).");
+                        var input = Console.ReadLine().Split(' ');
 
-                PlaceShip(human1, ship, x, y, dir);
+                        int x = int.Parse(input[0]);
+                        int y = int.Parse(input[1]);
+                        int dir = int.Parse(input[2]);
+
+                        placed = PlaceShip(human1, ship, x, y, dir);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Invalid Inputs");
+                    }
+
+                } while (!placed);
+                
             }
 
             human1.PrintBoard(human1.defend);
 
             foreach (Ship ship in human2.ships.Where(x => x.placed == false))
             {
-                Console.WriteLine($"Please enter a start location, x y (1-10) and direction (u,d,l,r) for your {ship.name} of size {ship.size.Length}. Enter as: x y d");
-                var input = Console.ReadLine().Split(' ');
-                int x = int.Parse(input[0]);
-                int y = int.Parse(input[1]);
-                char dir = char.Parse(input[2]);
+                bool placed = false;
+                human2.PrintBoard(human2.defend);
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine($"Please enter a start location, x y (1-10) and direction (0 for horizontal, 1 for vertical) for your {ship.name} of size {ship.size.Length}. Enter as: x y d");
+                        var input = Console.ReadLine().Split(' ');
 
-                PlaceShip(human2, ship, x, y, dir);
+                        int x = int.Parse(input[0]);
+                        int y = int.Parse(input[1]);
+                        int dir = int.Parse(input[2]);
+
+                        placed = PlaceShip(human2, ship, x, y, dir);
+                    } catch (Exception e)
+                    {
+                        Console.WriteLine("Error");
+                    }
+                    
+                } while (!placed);
+                
             }
 
             human2.PrintBoard(human2.defend);
