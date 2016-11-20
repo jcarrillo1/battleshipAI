@@ -48,7 +48,7 @@ namespace BattleShip
                 {
                     int x = StaticRandom.Instance.Next(1, 11);
                     int y = StaticRandom.Instance.Next(1, 11);
-                    int dir = StaticRandom.Instance.Next(0, 2);
+                    int dir = StaticRandom.Instance.Next(0, 100) % 2;
                     placed = ship.PlaceShip(this, x, y, dir);
                 } while (!placed);
 
@@ -130,15 +130,32 @@ namespace BattleShip
 
             return true;
         }
-        public bool GenedAttack(Player target, int x, int y)
+        public void CheckOrientation(int x, int y, Point point)
+        {
+            int originX = point.originX;
+            int originY = point.originY;
+            if (Math.Abs(x - originX) > 1)
+            {
+                int newX = x > originX ? originX - 1 : originX + 1;
+                moves.Push(new Point(newX, originY, point.shipName, originX, originY));
+            }
+            if (Math.Abs(y - originY) > 1)
+            {
+                int newY = y > originY ? originY - 1 : originY + 1;
+                moves.Push(new Point(originX, newY, point.shipName, originX, originY));
+            }
+        }
+        public bool GenedAttack(Player target, int x, int y, Point point)
         {
             
             if (x > 9 || y > 9 || x < 0 || y < 0)
             {
+                if (point != null) CheckOrientation(x, y, point);
                 return false;
             }
             if (attack[x, y] != 0)
             {
+                if (point != null) CheckOrientation(x, y, point);
                 return false;
             }
             if (target.defend[x, y] >= 2)
@@ -160,14 +177,23 @@ namespace BattleShip
                                 shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
-                                Console.WriteLine($"Ship {shp.name} has been sunk");
+                                //Console.WriteLine($"Ship {shp.name} has been sunk");
+                            }
+                            else if (point != null && shp.name == point.shipName)
+                            {
+                                int originX = point.originX;
+                                int originY = point.originY;
+                                int newX = x == originX ? x : originX > x ? x - 1 : x + 1;
+                                int newY = y == originY ? y : originY > y ? y - 1 : y + 1;
+                                moves.Push(new Point(newX, newY, point.shipName, originX, originY));
                             }
                             else
                             {
-                                moves.Push(new Point(x + 1, y, shp.name));
-                                moves.Push(new Point(x - 1, y, shp.name));
-                                moves.Push(new Point(x, y - 1, shp.name));
-                                moves.Push(new Point(x, y + 1, shp.name));
+                                if (point != null) CheckOrientation(x, y, point);
+                                moves.Push(new Point(x + 1, y, shp.name, x, y));
+                                moves.Push(new Point(x, y - 1, shp.name, x, y));
+                                moves.Push(new Point(x - 1, y, shp.name, x, y));
+                                moves.Push(new Point(x, y + 1, shp.name, x, y));
                             }
                             break;
                         }
@@ -185,14 +211,23 @@ namespace BattleShip
                                 shp.size[i] = 1;
                             if (shp.IsSunk())
                             {
-                                Console.WriteLine($"Ship {shp.name} has been sunk");
+                                //Console.WriteLine($"Ship {shp.name} has been sunk");
+                            }
+                            else if (point != null && shp.name == point.shipName)
+                            {
+                                int originX = point.originX;
+                                int originY = point.originY;
+                                int newX = x == originX ? x : originX > x ? x - 1 : x + 1;
+                                int newY = y == originY ? y : originY > y ? y - 1 : y + 1;
+                                moves.Push(new Point(newX, newY, point.shipName, originX, originY));
                             }
                             else
                             {
-                                moves.Push(new Point(x + 1, y, shp.name));
-                                moves.Push(new Point(x - 1, y, shp.name));
-                                moves.Push(new Point(x, y - 1, shp.name));
-                                moves.Push(new Point(x, y + 1, shp.name));
+                                if (point != null) CheckOrientation(x, y, point);
+                                moves.Push(new Point(x + 1, y, shp.name, x, y));
+                                moves.Push(new Point(x, y - 1, shp.name, x, y));
+                                moves.Push(new Point(x - 1, y, shp.name, x, y));
+                                moves.Push(new Point(x, y + 1, shp.name, x, y));
                             }
                             break;
                         }
@@ -202,9 +237,11 @@ namespace BattleShip
             }
             else
             {
+                // check if previously hit ship has an orientation figured out
+                if (point != null) CheckOrientation(x, y, point);
                 attack[x, y] = 1;
                 target.defend[x, y] = 1;
-                Console.WriteLine($"It's a miss.");
+                //Console.WriteLine($"It's a miss.");
             }
 
             return true;
@@ -218,9 +255,9 @@ namespace BattleShip
                 {
                     Point nextMove = moves.Pop();
                     Ship ship = target.ships.Find(x => nextMove.shipName == x.name);
-                    if (ship.IsSunk()) continue;
+                    if (ship.sunk) continue;
                     
-                    if (GenedAttack(target, nextMove.x, nextMove.y))
+                    if (GenedAttack(target, nextMove.x, nextMove.y, nextMove))
                     {   
                         return;
                     }
@@ -233,14 +270,18 @@ namespace BattleShip
                 bool attacked = false;
                 do
                 {
+                    // Checkerboard generations
                     genX = StaticRandom.Instance.Next(0, 10);
                     genY = StaticRandom.Instance.Next(0, 9);
-                    if ((genX% 2 == 0 && genY % 2 != 1) || (genX % 2 == 1 && genY % 2 != 0))
+                    if ((genX % 2 == 0 && genY % 2 != 1) || (genX % 2 == 1 && genY % 2 != 0))
                     {
                         genY += 1;
                     }
-                    
-                    attacked = GenedAttack(target, genX, genY);
+
+                    // Random generations
+                    //genX = StaticRandom.Instance.Next(0, 10);
+                    //genY = StaticRandom.Instance.Next(0, 10);
+                    attacked = GenedAttack(target, genX, genY, null);
                 } while (!attacked);
             }
             

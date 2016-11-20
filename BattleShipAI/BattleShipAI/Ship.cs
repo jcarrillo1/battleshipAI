@@ -43,7 +43,7 @@ namespace BattleShip
             //Check start location
             if (x < 0 || x > 9 || y < 0 || y > 9 || player.defend[x, y] != 0)
             {
-                Console.WriteLine($"Invalid start location.");
+                //Console.WriteLine($"Invalid start location.");
                 return false;
             }
 
@@ -60,14 +60,14 @@ namespace BattleShip
                     y2 = y + shipLength;
                     break;
                 default:
-                    Console.WriteLine($"Invalid direction.");
+                    //Console.WriteLine($"Invalid direction.");
                     return false;
             }
 
             //End location within bounds?
             if (x2 < 0 || y2 < 0 || x2 > 9 || y2 > 9)
             {
-                Console.WriteLine($"Start location, direction, and ship size end out of bounds.");
+                //Console.WriteLine($"Start location, direction, and ship size end out of bounds.");
                 return false;
             }
 
@@ -78,7 +78,7 @@ namespace BattleShip
                 {
                     if (player.defend[row, y] != 0)
                     {
-                        Console.WriteLine($"Overlapping ships at {row} {y}");
+                        //Console.WriteLine($"Overlapping ships at {row} {y}");
                         return false;
                     }
                 }
@@ -93,7 +93,7 @@ namespace BattleShip
                 {
                     if (player.defend[x, col] != 0)
                     {
-                        Console.WriteLine($"Overlapping ships at {x} {col}");
+                        //Console.WriteLine($"Overlapping ships at {x} {col}");
                         return false;
                     }
                 }
