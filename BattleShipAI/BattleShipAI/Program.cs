@@ -14,7 +14,7 @@ namespace BattleShip
         
         static bool IsGameOver(Player player)
         {
-            if (player.ships.Any(x => x.sunk == false))
+            if (player.ships.Any(x => x.IsSunk() == false))
             {
                 return false;
             }
@@ -64,23 +64,24 @@ namespace BattleShip
 
             while (true)
             {
-                bool didAttack = false;
-                do
-                {
-                    try
-                    {
-                        Console.WriteLine($"Player 1 please enter your attack as x y, (1-10).");
-                        var input = Console.ReadLine().Split(' ');
-                        int x = int.Parse(input[0]);
-                        int y = int.Parse(input[1]);
-                        didAttack = human1.Attack(human2, x, y);
-                    } catch(Exception e)
-                    {
-                        Console.WriteLine("Something went wrong, try again");
-                    }
-                    
-                } while (!didAttack);
-               
+                //bool didAttack = false;
+                //do
+                //{
+                //    try
+                //    {
+                //        Console.WriteLine($"Player 1 please enter your attack as x y, (1-10).");
+                //        var input = Console.ReadLine().Split(' ');
+                //        int x = int.Parse(input[0]);
+                //        int y = int.Parse(input[1]);
+                //        didAttack = human1.Attack(human2, x, y);
+                //    } catch(Exception e)
+                //    {
+                //        Console.WriteLine("Something went wrong, try again");
+                //    }
+
+                //} while (!didAttack);
+
+                human1.GenerateAttack(human2);
                 if (IsGameOver(human2))
                 {
                     Console.WriteLine($"You won");
@@ -96,16 +97,18 @@ namespace BattleShip
                 }
                 
                 
-                Console.WriteLine($"2 def");
-                human1.PrintBoard(human2.defend);
+                //Console.WriteLine($"2 def");
+                //human1.PrintBoard(human2.defend);
                 Console.WriteLine($"2 att");
                 human1.PrintBoard(human2.attack);
-                Console.WriteLine($"1 def");
-                human1.PrintBoard(human1.defend);
+                //Console.WriteLine($"1 def");
+                //human1.PrintBoard(human1.defend);
                 Console.WriteLine($"1 att");
                 human1.PrintBoard(human1.attack);
             }
+            Console.ReadLine();
         }
+        
 
     }
 }
