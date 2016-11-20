@@ -78,7 +78,7 @@ namespace BattleShip
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine("Something went wrong, try again");
+                            Console.WriteLine("Invalid inputs.");
                         }
 
                     } while (!didAttack);
@@ -126,8 +126,8 @@ namespace BattleShip
                 }
                 gameCount++;
             }
-            average /= totalGames;
-            Console.WriteLine($"Average in {totalGames}: {average}");
+            //average /= totalGames;
+            //Console.WriteLine($"Average in {totalGames}: {average}");
         }
         
 

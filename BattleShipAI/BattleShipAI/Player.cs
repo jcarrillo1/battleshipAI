@@ -46,6 +46,9 @@ namespace BattleShip
                 Console.WriteLine();
             }
         }
+        /*
+         *  Randomly place ships on your board
+         */
         public void PlaceShips()
         {
             
@@ -62,6 +65,9 @@ namespace BattleShip
 
             }
         }
+        /*
+         * Attack definition for a human
+         */
         public bool Attack(Player target, int x, int y)
         {
             x--;
@@ -138,7 +144,11 @@ namespace BattleShip
 
             return true;
         }
-        public void CheckOrientation(int x, int y, Point point)
+        /*
+         * Check and see if an orientation has been discovered 
+         * for a series of hits on a ship
+         */
+        private void CheckOrientation(int x, int y, Point point)
         {
             int originX = point.originX;
             int originY = point.originY;
@@ -153,7 +163,7 @@ namespace BattleShip
                 moves.Push(new Point(originX, newY, point.shipName, originX, originY));
             }
         }
-        public bool GenedAttack(Player target, int x, int y, Point point)
+        private bool GenedAttack(Player target, int x, int y, Point point)
         {
             
             if (x > 9 || y > 9 || x < 0 || y < 0)
@@ -276,7 +286,7 @@ namespace BattleShip
             
             if (moves.Count == 0)
             {
-                int genX, genY;
+                //int genX, genY;
                 bool attacked = false;
                 do
                 {
@@ -296,7 +306,7 @@ namespace BattleShip
             }
             
         }
-        public Tuple<int, int> GenerateHit()
+        private Tuple<int, int> GenerateHit()
         {
             
             int[,] probability = new int[10, 10];
