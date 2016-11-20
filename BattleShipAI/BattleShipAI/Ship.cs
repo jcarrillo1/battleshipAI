@@ -18,7 +18,6 @@ namespace BattleShip
             size = new int[sz];
             name = nme;
         }
-
         public void SetLocation(int x, int y, int x2, int y2)
         {
             loc = new Tuple<int, int, int, int>(x, y, x2, y2);
