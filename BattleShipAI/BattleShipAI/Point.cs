@@ -1,5 +1,8 @@
 ﻿namespace BattleShip
 {
+    /*
+     * Helper class
+     */
     public class Point
     {
         public int x;

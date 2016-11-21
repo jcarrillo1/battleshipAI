@@ -128,6 +128,7 @@ namespace BattleShip
             }
             //average /= totalGames;
             //Console.WriteLine($"Average in {totalGames}: {average}");
+            Console.ReadLine();
         }
         
 

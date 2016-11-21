@@ -18,6 +18,9 @@ namespace BattleShip
             new Ship(4, "battleship"),
             new Ship(5, "carrier"),
         };
+        /*
+         * Dictionary of opponent ships that are still alive.
+         */
         public Dictionary<string, int> wildShips = new Dictionary<string, int>()
         {
             { "destroyer", 2 },
@@ -163,6 +166,9 @@ namespace BattleShip
                 moves.Push(new Point(originX, newY, point.shipName, originX, originY));
             }
         }
+        /*
+         * Attempt to execute a generated attack
+         */
         private bool GenedAttack(Player target, int x, int y, Point point)
         {
             
@@ -266,6 +272,9 @@ namespace BattleShip
 
             return true;
         }
+        /*
+         * Generate an attack
+         */
         public void GenerateAttack(Player target)
         {
             if (moves.Count > 0)
@@ -306,9 +315,14 @@ namespace BattleShip
             }
             
         }
+        /*
+         * Generate two points for your next hit box
+         */
         private Tuple<int, int> GenerateHit()
         {
-            
+
+            // Calculate relative probability that a ship is in that square based
+            // On possible states
             int[,] probability = new int[10, 10];
             foreach (KeyValuePair<string, int> ship in wildShips)
             {
